@@ -1,11 +1,10 @@
-package com.fundrise.gto.core.config.secrets.configuration;
+package com.example.propertyconverterdemo.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
-import com.fundrise.gto.core.config.secrets.configuration.BaseInterface;
-import com.fundrise.gto.core.config.secrets.converters.StringWrapperConverter;
-import com.fundrise.gto.core.config.secrets.properties.StringWrapperProperties;
+import com.example.propertyconverterdemo.converters.StringWrapperConverter;
+import com.example.propertyconverterdemo.properties.StringWrapperProperties;
 
 public interface SimpleInterface extends BaseInterface {
 

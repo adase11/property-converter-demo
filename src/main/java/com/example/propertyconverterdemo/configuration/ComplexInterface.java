@@ -1,11 +1,10 @@
-package com.fundrise.gto.core.config.secrets.configuration;
+package com.example.propertyconverterdemo.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
-import com.fundrise.gto.core.config.secrets.configuration.BaseInterface;
-import com.fundrise.gto.core.config.secrets.converters.ComplexStringWrapperConverter;
-import com.fundrise.gto.core.config.secrets.properties.ComplexStringWrapperProperties;
+import com.example.propertyconverterdemo.converters.ComplexStringWrapperConverter;
+import com.example.propertyconverterdemo.properties.ComplexStringWrapperProperties;
 
 public interface ComplexInterface extends BaseInterface {
 

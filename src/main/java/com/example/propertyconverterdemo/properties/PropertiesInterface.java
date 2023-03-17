@@ -1,4 +1,4 @@
-package com.fundrise.gto.core.config.secrets.properties;
+package com.example.propertyconverterdemo.properties;
 
 public interface PropertiesInterface {
 

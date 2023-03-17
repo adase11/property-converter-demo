@@ -1,20 +1,23 @@
-package com.fundrise.gto.core.config.secrets.converters;
+package com.example.propertyconverterdemo.converters;
+
+
+import static com.example.propertyconverterdemo.PropertyConverterDemoApplication.ADDITION;
 
 import java.util.function.Function;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.core.convert.converter.Converter;
 
-import com.fundrise.gto.core.config.secrets.propertywrappers.StringWrapper;
+import com.example.propertyconverterdemo.propertywrappers.StringWrapper;
+
 
 @ConfigurationPropertiesBinding
 public class StringWrapperConverter implements Converter<String, StringWrapper> {
 
-	private final Function<String, StringWrapper> function = s -> new StringWrapper(s + "-additional-1");
+	private final Function<String, StringWrapper> function = s -> new StringWrapper(s + ADDITION);
 
 	@Override
-	public StringWrapper convert(@NotNull String source) {
+	public StringWrapper convert(String source) {
 		return function.apply(source);
 	}
 }

@@ -1,4 +1,4 @@
-package com.fundrise.gto.core.config.secrets.propertywrappers;
+package com.example.propertyconverterdemo.propertywrappers;
 
 public record StringWrapper(String value) {
 }

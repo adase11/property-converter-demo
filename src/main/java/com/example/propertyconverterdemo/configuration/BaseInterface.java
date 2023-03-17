@@ -1,4 +1,4 @@
-package com.fundrise.gto.core.config.secrets.configuration;
+package com.example.propertyconverterdemo.configuration;
 
 public interface BaseInterface {
 

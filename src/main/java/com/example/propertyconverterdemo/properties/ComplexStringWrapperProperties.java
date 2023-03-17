@@ -1,6 +1,6 @@
-package com.fundrise.gto.core.config.secrets.properties;
+package com.example.propertyconverterdemo.properties;
 
-import com.fundrise.gto.core.config.secrets.propertywrappers.ComplexStringWrapper;
+import com.example.propertyconverterdemo.propertywrappers.ComplexStringWrapper;
 
 public class ComplexStringWrapperProperties implements PropertiesInterface {
 	private String value;

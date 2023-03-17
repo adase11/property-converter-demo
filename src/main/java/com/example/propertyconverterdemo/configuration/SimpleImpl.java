@@ -1,4 +1,4 @@
-package com.fundrise.gto.core.config.secrets.configuration;
+package com.example.propertyconverterdemo.configuration;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import com.fundrise.gto.core.config.secrets.properties.PropertiesInterface;
+import com.example.propertyconverterdemo.properties.PropertiesInterface;
 
 @AutoConfiguration
 public class SimpleImpl implements SimpleInterface {
