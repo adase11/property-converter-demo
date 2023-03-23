@@ -1,0 +1,9 @@
+{
+  "properties": [
+	{
+	  "name": "autoconfiguration.file",
+	  "type": "java.lang.String",
+	  "description": "Which configuration to use. Use 'one' for @PropertySource on concrete class and 'two' for @PropertySource on the interface."
+	}
+  ]
+}
