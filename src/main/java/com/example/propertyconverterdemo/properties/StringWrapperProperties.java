@@ -1,53 +1,35 @@
 package com.example.propertyconverterdemo.properties;
 
 
-import com.example.propertyconverterdemo.propertywrappers.StringWrapper;
+import com.example.propertyconverterdemo.propertywrappers.ComplexStringWrapper;
+import com.example.propertyconverterdemo.propertywrappers.SimpleStringWrapper;
 
-public class StringWrapperProperties implements PropertiesInterface {
-	private String value;
-	private StringWrapper stringWrapper;
-	private String value2;
-	private StringWrapper stringWrapper2;
+public class StringWrapperProperties {
+	private ComplexStringWrapper complexStringWrapper;
+	private SimpleStringWrapper simpleStringWrapper;
 
-	public String getValue2() {
-		return value2;
+
+	public ComplexStringWrapper getComplexStringWrapper() {
+		return complexStringWrapper;
 	}
 
-	public void setValue2(String value2) {
-		this.value2 = value2;
+	public void setComplexStringWrapper(ComplexStringWrapper complexStringWrapper) {
+		this.complexStringWrapper = complexStringWrapper;
 	}
 
-	public String stringWrapper2() {
-		return stringWrapper2.value();
+	public SimpleStringWrapper getSimpleStringWrapper() {
+		return simpleStringWrapper;
 	}
 
-	public void setStringWrapper2(StringWrapper stringWrapper2) {
-		this.stringWrapper2 = stringWrapper2;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
-	}
-
-	public void setStringWrapper(StringWrapper stringWrapper) {
-		this.stringWrapper = stringWrapper;
-	}
-
-	public String stringWrapper() {
-		return stringWrapper.value();
+	public void setSimpleStringWrapper(SimpleStringWrapper simpleStringWrapper) {
+		this.simpleStringWrapper = simpleStringWrapper;
 	}
 
 	@Override
 	public String toString() {
 		return "StringWrapperProperties{" +
-				"value='" + value + '\'' +
-				", stringWrapper=" + stringWrapper +
-				", value2='" + value2 + '\'' +
-				", stringWrapper2=" + stringWrapper2 +
+				"complexStringWrapper=" + complexStringWrapper +
+				", simpleStringWrapper=" + simpleStringWrapper +
 				'}';
 	}
 }

@@ -1,90 +1,76 @@
 package com.example.propertyconverterdemo;
 
 import static com.example.propertyconverterdemo.PropertyConverterDemoApplication.ADDITION;
-import static com.example.propertyconverterdemo.PropertyConverterDemoApplication.FIRST_VALUE;
-import static com.example.propertyconverterdemo.PropertyConverterDemoApplication.SECOND_VALUE;
+import static com.example.propertyconverterdemo.PropertyConverterDemoApplication.COMPLEX_VALUE;
+import static com.example.propertyconverterdemo.PropertyConverterDemoApplication.SIMPLE_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.math.BigDecimal;
+import java.util.List;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.context.annotation.UserConfigurations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.core.convert.support.GenericConversionService;
 
-import com.example.propertyconverterdemo.configuration.ComplexImpl;
-import com.example.propertyconverterdemo.configuration.SimpleImpl;
-import com.example.propertyconverterdemo.converters.ComplexStringWrapperConverter;
-import com.example.propertyconverterdemo.converters.StringWrapperConverter;
-import com.example.propertyconverterdemo.properties.ComplexStringWrapperProperties;
+import com.example.propertyconverterdemo.configuration.ConfigurationClass;
+import com.example.propertyconverterdemo.converters.SimpleStringWrapperConverter;
 import com.example.propertyconverterdemo.properties.StringWrapperProperties;
-import com.example.propertyconverterdemo.properties.file.PropertiesAutoConfiguration;
-import com.example.propertyconverterdemo.propertywrappers.ComplexStringWrapper;
-import com.example.propertyconverterdemo.propertywrappers.StringWrapper;
+import com.example.propertyconverterdemo.propertywrappers.SimpleStringWrapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class PropertyConverterDemoApplicationTest {
-	private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-			.withUserConfiguration(PropertyConverterDemoApplication.class).withConfiguration(AutoConfigurations.of(PropertiesAutoConfiguration.class));
+	private final ApplicationContextRunner contextRunner = new ApplicationContextRunner().withUserConfiguration(PropertyConverterDemoApplication.class);
 
 	@Autowired
 	private StringWrapperProperties stringWrapperProperties;
 
-	@Autowired
-	private ComplexStringWrapperProperties complexStringWrapperProperties;
+	List<Executable> buildAssertions(StringWrapperProperties props) {
+		return List.of(
+				() -> assertEquals(COMPLEX_VALUE + ADDITION, props.getComplexStringWrapper().value()),
+				() -> assertEquals(SIMPLE_VALUE + ADDITION, props.getSimpleStringWrapper().value(), "This should pass if the converter was registered correctly.")
+		);
+	}
 
 	@Test
+	@DisplayName("Using @SpringBootTest. Demonstrate that for the 'simple' case the converter does take effect.")
 	void testFullAppSimple_doesNotWork() {
-		assertEquals(FIRST_VALUE, stringWrapperProperties.getValue());
-		assertEquals(SECOND_VALUE + ADDITION, stringWrapperProperties.stringWrapper());
+		assertAll(
+				buildAssertions(stringWrapperProperties)
+		);
+
 	}
 
 	@Test
-	void testFullAppComplex_worksAsExpected() {
-		assertEquals(FIRST_VALUE, complexStringWrapperProperties.getValue());
-		assertEquals(SECOND_VALUE + ADDITION, complexStringWrapperProperties.complexStringWrapper());
-	}
-
-	@Test
+	@DisplayName("Using ApplicationContextRunner. Demonstrates that the issue is only reproducible using @SpringBootTest.")
 	void testBindingSimple_worksAsExpected() {
-		contextRunner.withConfiguration(AutoConfigurations.of(SimpleImpl.class)).run(ctx -> {
-			assertThat(ctx).hasNotFailed();
-			final StringWrapperProperties stringWrapperProperties = ctx.getBean(StringWrapperProperties.class);
-			assertEquals(FIRST_VALUE, stringWrapperProperties.getValue());
-			assertEquals(SECOND_VALUE + ADDITION, stringWrapperProperties.stringWrapper());
-		});
-	}
-
-
-	@Test
-	void testBindingComplex_worksAsExpected() {
-		contextRunner.withConfiguration(AutoConfigurations.of(ComplexImpl.class)).run(ctx -> {
-			assertThat(ctx).hasNotFailed();
-			final ComplexStringWrapperProperties complexStringWrapperProperties = ctx.getBean(ComplexStringWrapperProperties.class);
-			assertEquals("first-value", complexStringWrapperProperties.getValue());
-			assertEquals(SECOND_VALUE + ADDITION, complexStringWrapperProperties.complexStringWrapper());
-		});
+		contextRunner.withConfiguration(UserConfigurations.of(ConfigurationClass.class))
+				.withPropertyValues(
+						"demo.complexStringWrapper=complex-value",
+						"demo.simpleStringWrapper=simple-value"
+				)
+				.run(ctx -> {
+					assertThat(ctx).hasNotFailed();
+					final StringWrapperProperties props = ctx.getBean(StringWrapperProperties.class);
+					assertAll(
+							buildAssertions(props)
+					);
+				});
 	}
 
 	@Test
+	@DisplayName("Confirms that the converter works (that it adds the value of ADDITION to the property string).")
 	void convertToStringWrapper_worksAsExpected() {
 		final GenericConversionService conversionService = new GenericConversionService();
-		conversionService.addConverter(new StringWrapperConverter());
-		assertTrue(conversionService.canConvert(String.class, StringWrapper.class));
-		final StringWrapper stringWrapper = conversionService.convert("test", StringWrapper.class);
-		assertEquals(new StringWrapper("test" + ADDITION), stringWrapper);
-	}
-
-	@Test
-	void convertToComplexStringWrapper_worksAsExpected() {
-		final GenericConversionService conversionService = new GenericConversionService();
-		conversionService.addConverter(new ComplexStringWrapperConverter());
-		assertTrue(conversionService.canConvert(String.class, ComplexStringWrapper.class));
-		final ComplexStringWrapper stringWrapper = conversionService.convert("test", ComplexStringWrapper.class);
-		assertEquals(new ComplexStringWrapper("test" + ADDITION, BigDecimal.ONE), stringWrapper);
+		conversionService.addConverter(new SimpleStringWrapperConverter());
+		assertTrue(conversionService.canConvert(String.class, SimpleStringWrapper.class));
+		final SimpleStringWrapper stringWrapper = conversionService.convert("test", SimpleStringWrapper.class);
+		assertEquals(new SimpleStringWrapper("test" + ADDITION), stringWrapper);
 	}
 }
